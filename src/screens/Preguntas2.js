@@ -1,74 +1,8 @@
 // QuizScreen.js
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Pressable, Alert } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import { TIPOS_PREGUNTAS, ConfiguracionPreguntas } from '../data/formato_preguntas';
-
-const determinarFase = (answers) => {
-  let seed = 0;
-  let early = 0;
-  let growth = 0;
-  let expansion = 0;
-
-  answers.forEach(({ question, answer }) => {
-    switch (question) {
-      case "¿La startup cuenta con un producto o servicio mínimamente viable (MVP)?":
-        if (answer === 'Sí') early++;
-        else seed+=10;
-        break;
-      case "¿Su startup ha comenzado a comercializar el producto o servicio en el mercado?":
-        if (answer === 'Sí') early++;
-        else seed++;
-        break;
-      case "¿La empresa ha generado ingresos?":
-        if (answer === 'Sí') growth++;
-        else early++;
-        break;
-      case "¿Cuál es el nivel de recurrencia de los ingresos?":
-        if (answer === 'Recurrente con ingresos altos') expansion++;
-        else if (answer === 'Recurrente con ingresos moderados') growth++;
-        else if (answer === 'Recurrente con ingresos bajos') early++;
-        else seed++;
-        break;
-      case "¿Cuántos empleados tiene actualmente la startup":
-        if (answer === 'Más de 50') expansion++;
-        else if (answer === 'Entre 11 y 50') growth++;
-        else early++;
-        break;
-      case "¿La empresa ha validado su producto o servicio en el mercado con pruebas de concepto?":
-        if (answer === 'Sí') early++;
-        else seed++;
-        break;
-      case "¿Cuál es el mayor tipo de financiación que ha recibido la empresa hasta ahora?":
-        if (answer === 'Salida a bolsa') expansion++;
-        else if (answer === 'Inversores Profesionales ') growth++;
-        else if (answer === 'Inversores Privados') early++;
-        else seed++;
-        break;
-      case "¿Está la empresa en proceso de escalar su producto o servicio en nuevos mercados o segmentos?":
-        if (answer === 'Sí') growth++;
-        else early++;
-        break;
-      case "¿Cuenta la empresa con una base de clientes estable y en crecimiento?":
-        if (answer === 'Sí') expansion++;
-        else growth++;
-        break;
-      case "Está en proceso de una salida a bolsa para captar financiación?":
-        if (answer === 'Sí') expansion++;
-        else growth++;
-        break;
-      default:
-        break;
-    }
-  });
-
-  const maxPhase = Math.max(seed, early, growth, expansion);
-  if (maxPhase === seed) return "Seed";
-  if (maxPhase === early) return "Early";
-  if (maxPhase === growth) return "Growth";
-  return "Expansion";
-};
-
 
 const QuizScreen = ({ route, theme }) => {
   const { questions } = route.params;
@@ -105,43 +39,47 @@ const QuizScreen = ({ route, theme }) => {
     if (showResults) {
       //navigation.navigate("Opciones");
       //showAnswersAlert();
-      navigation.navigate("Resultados", { answers });
+      navigation.navigate("Resultados2", { answers });
     }
   }, [showResults]);
 
   const currentQuestion = data[index];
 
+  
   const handleFinishQuiz = () => {
-    if (selectedAnswer !== null) {
+    if (selectedAnswer !== null && selectedAnswer !== "") {
       setAnswers((prevAnswers) => {
         const newAnswers = [...prevAnswers, { question: currentQuestion.question, answer: selectedAnswer }];
-        const fase = determinarFase(newAnswers);
-        navigation.navigate("Resultados", { answers: newAnswers,fase });
+        navigation.navigate("Resultados2", { answers: newAnswers });
         return newAnswers;
       });
+    } else {
+      Alert.alert("Por favor, selecciona una respuesta antes de continuar.");
     }
   };
 
-
   const handleNextQuestion = () => {
-    if (selectedAnswer !== null) {
+    if (selectedAnswer !== null && selectedAnswer !== "") {
       setAnswers([...answers, { question: currentQuestion.question, answer: selectedAnswer }]);
       if (currentQuestion.subQuestion && selectedAnswer === 'Sí' && !showSubQuestion) {
         setShowSubQuestion(true);
       } else {
         setIndex(index + 1);
       }
+    } else {
+      Alert.alert("Por favor, selecciona una respuesta antes de continuar.");
     }
-    
   };
 
   const handleSubQuestionNext = () => {
-    if (subQuestionAnswer !== null) {
+    if (subQuestionAnswer !== null && subQuestionAnswer !== "") {
       setAnswers([...answers,
         { question: currentQuestion.question, answer: selectedAnswer },
         { question: currentQuestion.subQuestion.question, answer: subQuestionAnswer }]);
       setIndex(index + 1);
       setShowSubQuestion(false);
+    } else {
+      Alert.alert("Por favor, selecciona una respuesta antes de continuar.");
     }
   };
 

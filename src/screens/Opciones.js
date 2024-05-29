@@ -26,7 +26,7 @@ const SettingsScreens = ({ theme }) => {
   };
 
   if (showPreguntas) {
-    navigation.navigate("Preguntas", { questions: currentQuestions });
+    navigation.navigate("Preguntas2", { questions: currentQuestions });
   }
 
   return (

@@ -64,6 +64,7 @@ export const ConfiguracionPreguntas = {
           onValueChange={(itemValue) => handleSelect(itemValue)}
           style={{ color: theme === 'dark' ? 'white' : 'black' }}
         >
+          <Picker.Item label="Seleccione una opción..." value="" />
           {opciones.map((item, idx) => (
             <Picker.Item key={idx} label={item} value={item} />
           ))}
@@ -71,6 +72,7 @@ export const ConfiguracionPreguntas = {
       </View>
     )
   }
+
 
 };
 

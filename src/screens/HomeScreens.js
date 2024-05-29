@@ -2,30 +2,30 @@ import React, { useEffect, useState } from 'react';
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import { Colors } from '../theme';
+import questions from '../data/pre/questions';
 
 const Home = ({ theme }) => {
   const navigation = useNavigation();
   const [themeValue, setThemeValue] = useState('light');
-  const [bannerUrl, setBannerUrl] = useState('');
+  const [bannerUrl, setBannerUrl] = useState('https://i.postimg.cc/QM81nzCN/1.png'); // Inicializa con una URL predeterminada
 
   useEffect(() => {
     setThemeValue(theme); 
-    setBannerUrl(getBannerUrl(theme));
+    const url = getBannerUrl(theme);
+    console.log('Theme:', theme); // Depuración
+    setBannerUrl(url);
   }, [theme]);
 
   const handleShowOpciones = () => {
-    navigation.navigate("Opciones");
+    navigation.navigate("Preguntas", { questions: questions });
   };
 
   const getBannerUrl = (theme) => {
-    // Definir las URLs de las imágenes para los diferentes temas
     const bannerUrls = {
       light: 'https://i.postimg.cc/QM81nzCN/1.png',
-
-      
       dark: 'https://i.postimg.cc/QM81nzCN/1.png', // Cambiar por la URL de la imagen para el tema oscuro
     };
-    return bannerUrls[theme];
+    return bannerUrls[theme] || 'https://i.postimg.cc/QM81nzCN/1.png'; // Valor predeterminado
   };
 
   const styles = styling(themeValue);
@@ -37,9 +37,7 @@ const Home = ({ theme }) => {
       </Text>
       <View style={styles.bannerContainer}>
         <Image
-          source={{
-            uri: bannerUrl,
-          }}
+          source={{ uri: bannerUrl }}
           style={styles.banner}
           resizeMode="contain"
         />
