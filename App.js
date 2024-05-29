@@ -4,6 +4,9 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Home from "./src/screens/HomeScreens";
 import OPCIONES from "./src/screens/Opciones";
 import Preguntas from "./src/screens/Preguntas";
+import Preguntas2 from "./src/screens/Preguntas2";
+import Resultados from "./src/screens/Resultados";
+import Resultados2 from "./src/screens/Resultados2";
 import { Colors } from './src/theme';
 import { get } from './src/utiles/Storage';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
@@ -64,6 +67,15 @@ export default function App() {
         </Stack.Screen>
         <Stack.Screen name="Preguntas">
           {props => <Preguntas {...props} theme={themeValue} />}
+        </Stack.Screen>
+        <Stack.Screen name="Preguntas2">
+          {props => <Preguntas2 {...props} theme={themeValue} />}
+        </Stack.Screen>
+        <Stack.Screen name="Resultados">
+          {props => <Resultados {...props} theme={themeValue} />}
+        </Stack.Screen>
+        <Stack.Screen name="Resultados2">
+          {props => <Resultados2 {...props} theme={themeValue} />}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
