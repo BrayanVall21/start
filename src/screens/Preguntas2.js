@@ -5,13 +5,12 @@ import { useNavigation } from "@react-navigation/native";
 import { TIPOS_PREGUNTAS, ConfiguracionPreguntas } from '../data/formato_preguntas';
 
 const QuizScreen = ({ route, theme }) => {
-  const { questions } = route.params;
+  const { questions,tipo} = route.params;
   const data = questions;
-  //const totalQuestions = data.length;
+  const totalQuestions = data.length;
   const [index, setIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [subQuestionAnswer, setSubQuestionAnswer] = useState(null);
-  const [totalQuestions, setTotalQuestions] = useState(data.length);
   const [answers, setAnswers] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [showSubQuestion, setShowSubQuestion] = useState(false);
@@ -34,15 +33,15 @@ const QuizScreen = ({ route, theme }) => {
       setShowResults(true);
     }
   }, [index, showResults]);
-
+/*
   useEffect(() => {
     if (showResults) {
       //navigation.navigate("Opciones");
       //showAnswersAlert();
-      navigation.navigate("Resultados2", { answers });
+      navigation.navigate("Resultados2", { answers,tipo });
     }
   }, [showResults]);
-
+*/
   const currentQuestion = data[index];
 
   
@@ -50,7 +49,7 @@ const QuizScreen = ({ route, theme }) => {
     if (selectedAnswer !== null && selectedAnswer !== "") {
       setAnswers((prevAnswers) => {
         const newAnswers = [...prevAnswers, { question: currentQuestion.question, answer: selectedAnswer }];
-        navigation.navigate("Resultados2", { answers: newAnswers });
+        navigation.navigate("Resultados2", { answers: newAnswers,tipo,theme:theme });
         return newAnswers;
       });
     } else {

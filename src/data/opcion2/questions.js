@@ -10,11 +10,13 @@ export default[
     {
       question: "¿Su start up busca la innovación?",
       type: "SI_NO",
-      subQuestion: {
-        question: "¿Qué tanta cultura empresarial hay en su start up?",
-        type: "ESCALA",
-        opciones: ['1', '2', '3', '4', '5']
-      }
+    },
+    {
+
+      question: "¿Qué tanta cultura empresarial hay en su start up?",
+      type: "ESCALA",
+      opciones: ['Nada de cultura', 'Baja cultura', 'Intermedia cultura', 'Considerable cultura', 'Alta cultura']
+  
     },
     {
       question: "¿Tiene experiencia en el sector?",
@@ -22,7 +24,7 @@ export default[
       subQuestion: {
         question: "Cuánta",
         type: "ESCALA",
-        opciones: ['1', '2', '3', '4', '5']
+        opciones: ['Muy baja', 'Baja', 'Aceptable', 'Considerable', 'Elevada']
       }
     },
     {
@@ -31,7 +33,7 @@ export default[
       subQuestion: {
         question: "Cuánta",
         type: "ESCALA",
-        opciones: ['1', '2', '3', '4', '5']
+        opciones: ['Muy baja', 'Baja', 'Aceptable', 'Considerable', 'Elevada']
       }
     },
     {
@@ -40,7 +42,7 @@ export default[
       subQuestion: {
         question: "Cuánta (Habilidades Técnicas)",
         type: "ESCALA",
-        opciones: ['1', '2', '3', '4', '5']
+        opciones: ['Muy baja', 'Baja', 'Aceptable', 'Considerable', 'Elevada']
       }
     },
     {
@@ -49,7 +51,7 @@ export default[
       subQuestion: {
         question: "Cuánta",
         type: "ESCALA",
-        opciones: ['1', '2', '3', '4', '5']
+        opciones: ['Muy baja', 'Baja', 'Aceptable', 'Considerable', 'Elevada']
       }
     },
     {
@@ -58,7 +60,7 @@ export default[
       subQuestion: {
         question: "Cuánta",
         type: "ESCALA",
-        opciones: ['1', '2', '3', '4', '5']
+        opciones: ['Muy baja', 'Baja', 'Aceptable', 'Considerable', 'Elevada']
       }
     },
     {
@@ -66,9 +68,9 @@ export default[
       type: "TEXTO",
     },
     {
-      question: "¿Qué tan motivado estaba al crear su start up?",
+      question: "¿Qué tanta motivación tenía al crear su start up?",
         type: "ESCALA",
-        opciones: ['1', '2', '3', '4', '5']
+        opciones: ['Sin motivación', 'Poca motivación', 'Motivación normal', 'Considerable motivación', 'Elevada motivación']
     },
     {
       question: "¿Los productos/servicios que están planteando son innovadores?",

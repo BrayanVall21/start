@@ -5,16 +5,16 @@ export default[
         subQuestion: {
           question: "¿Según su métrica de satisfacción del cliente, cuán satisfecho está su cliente?",
           type: "ESCALA",
-          opciones: ['1', '2', '3', '4', '5']
+          opciones: ['Nada satisfecho', 'Poco satisfecho', 'Neutro', 'Satisfecho', 'Muy Satisfecho']
         }
       },
       {
-        question: "¿Su startup está siendo financiada por alguna entidad pública o privada?",
+        question: "¿Su startup tiene financiamiento (Propia/externa)",
         type: "SI_NO",
         subQuestion: {
-          question: "Por favor, usando la escala, seleccione en qué categoría de financiación se encuentra su startup.",
+          question: "Seleccione en qué categoría de financiación se encuentra su startup.",
           type: "ESCALA",
-          opciones: ['10k', '20k', '30k', '40k', '50k', '60k+']
+          opciones: ['Ahorros', 'Inversores privados', 'Inversores profesionales', 'Salida a bolsa']
         }
       },
       {
@@ -33,8 +33,7 @@ export default[
       {
         question: "¿Qué tanto influyen las políticas estatales científicas y tecnológicas en tu start up?",
         type: "ESCALA",
-        opciones: ['1', '2', '3', '4', '5']
+        opciones: ['Casi nada de influencia', 'Muy Poca influencia', 'Influencia media', 'Elevada influencia', 'Dependencia']
       },
   
-    // Otras preguntas para factores externos
   ];

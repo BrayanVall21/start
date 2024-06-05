@@ -73,11 +73,10 @@ const determinarFase = (answers) => {
 const QuizScreen = ({ route, theme }) => {
   const { questions } = route.params;
   const data = questions;
-  //const totalQuestions = data.length;
+  const totalQuestions = data.length;
   const [index, setIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [subQuestionAnswer, setSubQuestionAnswer] = useState(null);
-  const [totalQuestions, setTotalQuestions] = useState(data.length);
   const [answers, setAnswers] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [showSubQuestion, setShowSubQuestion] = useState(false);

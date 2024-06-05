@@ -7,6 +7,8 @@ import Preguntas from "./src/screens/Preguntas";
 import Preguntas2 from "./src/screens/Preguntas2";
 import Resultados from "./src/screens/Resultados";
 import Resultados2 from "./src/screens/Resultados2";
+import PostResultados from "./src/screens/PostResultados";
+import ResultadosProvider from "./src/data/almacen";
 import { Colors } from './src/theme';
 import { get } from './src/utiles/Storage';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
@@ -36,7 +38,8 @@ export default function App() {
     setTheme(newTheme === 'dark' ? DarkTheme : DefaultTheme);
   };
   return (
-    <NavigationContainer
+    <ResultadosProvider>
+      <NavigationContainer
       theme={theme}
       onStateChange={() => {
         getThemeFromStorage(); // Llamar a la función cada vez que cambie el estado de la navegación
@@ -77,8 +80,13 @@ export default function App() {
         <Stack.Screen name="Resultados2">
           {props => <Resultados2 {...props} theme={themeValue} />}
         </Stack.Screen>
+        <Stack.Screen name="PostResultados">
+          {props => <PostResultados {...props} theme={themeValue} />}
+        </Stack.Screen>
+        
       </Stack.Navigator>
-    </NavigationContainer>
+      </NavigationContainer>
+    </ResultadosProvider>
   );
 }
 

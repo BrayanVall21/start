@@ -1,34 +1,46 @@
-import React, { useState } from 'react'; // Importa useState
-import { ScrollView, StyleSheet, Text, View, Dimensions, Alert } from "react-native";
+import React, {useEffect,useState } from 'react';
+import { ScrollView, StyleSheet, Text, View, Dimensions, Alert, Button } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import questions1 from '../data/opcion1/questions';
 import questions2 from '../data/opcion2/questions';
 import { useNavigation } from "@react-navigation/native";
+import { useResultados } from '../data/almacen';
 
-
-const SettingsScreens = ({ theme }) => {
-  const navigation = useNavigation();
+const SettingsScreens = ({ theme}) => {
+  const navigation = useNavigation(); 
+  const { iResultados, setIResultados, eResultados, setEResultados } = useResultados();
 
   const medicionDispositivos = [
-    { nombre: 'Factores Externos', icon: 'sun-o', questions: questions1 },
-    { nombre: 'Factores Internos', icon: 'heart', questions: questions2 },
+    { nombre: 'Factores Externos', icon: 'sun-o', questions: questions1, tipo: 'externos' },
+    { nombre: 'Factores Internos', icon: 'heart', questions: questions2, tipo: 'internos' },
   ];
 
   const windowWidth = Dimensions.get('window').width;
-  const [showPreguntas, setShowPreguntas] = useState(false);
   const [currentQuestions, setCurrentQuestions] = useState(null);
+  //const showResultadosButton = iResultados !== null && eResultados !== null; 
+
+  /*
+  useEffect(() => {
+    if (resultados !== null) {
+      switch (origen) {
+        case 'externos': setIResultados(resultados); break;
+        case 'internos': setEResultados(resultados); break;
+      }
+    }
+  }, [resultados, origen]);
+  */
 
   const handleIconPress = (questions) => {
-    setCurrentQuestions(questions.questions);
-    setShowPreguntas(true);
+    //setCurrentQuestions(questions.questions);
+    navigation.navigate("Preguntas2", { questions: questions.questions, tipo: questions.tipo });
   };
 
-  if (showPreguntas) {
-    navigation.navigate("Preguntas2", { questions: currentQuestions });
-  }
-
+  const handleViewResults = () => {
+    const answers = [...iResultados, ...eResultados];
+    navigation.navigate("PostResultados", { answers, theme });
+  };
   return (
     <LinearGradient colors={theme === 'dark' ? ["#070F2B", "#1B1A55", "#535C91"] : ["#1B1A55", "#535C91", "#9290C3"]} style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -44,6 +56,17 @@ const SettingsScreens = ({ theme }) => {
             ))}
           </View>
         </View>
+        
+        {(iResultados !== null && eResultados !== null) && (
+          <View style={styles.resultadosButtonContainer}>
+            <Button
+              title="Ver Resultados"
+              onPress={handleViewResults}
+              disabled={!iResultados || !eResultados}
+            />
+          </View>
+        )}
+
       </ScrollView>
     </LinearGradient>
   );
@@ -87,7 +110,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#FFF",
     textAlign: 'center',
-    fontWeight: "450",
+    fontWeight: "400",
     marginBottom: 8,
   },
   iconTopLeft: {
