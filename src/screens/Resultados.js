@@ -19,7 +19,13 @@ const ResultsScreen = () => {
   const styles = styling(currentTheme);
 
   const handleNavigation = () => {
-    navigation.navigate('Opciones');
+    if(fase=== 'Seed' || fase === 'Early'){
+      navigation.navigate('Opciones');
+    }
+    else{
+      navigation.navigate('Inicio');
+    }
+    
   };
 
   return (

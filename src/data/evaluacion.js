@@ -1,82 +1,125 @@
+import fetch from 'node-fetch'; // Asegúrate de tener 'node-fetch' si estás usando Node.js
+
+const fetchGeminiResponse = async (prompt, apiKey) => {
+  const requestBody = {
+    contents: [{
+      parts: [{
+        text: prompt
+      }]
+    }],
+    safetySettings: [{
+      category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+      threshold: "BLOCK_ONLY_HIGH"
+    }],
+    generationConfig: {
+      stopSequences: ["Title"],
+      temperature: 1.0
+    }
+  };
+
+  try {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(requestBody)
+    });
+
+    const data = await response.json();
+    const result = data.candidates[0].content.parts[0].text.trim();
+    return result;
+  } catch (error) {
+    console.error('Error fetching data from Gemini: ', error);
+    return null;
+  }
+};
+
+
+
 // evaluacion.js
-const evaluarExito = (answers) => {
-    let score = 0;
-    let multi = 1;
-    answers.forEach(({ question, answer, subAnswer }) => {
-      switch (question) {
+const evaluarExito = async (answers) => {
+  let score = 0;
+  const API_KEY = 'AIzaSyALve24SgD0_zE8vNuy_XMYjzgk4_onm-0'; // Asegúrate de usar tu clave API real
+
+  for (let i = 0; i < answers.length; i++) {
+    const { question, answer } = answers[i];
+
+    switch (question) {
 
         //Externos (60 ptos)
         case "¿Tiene alguna métrica de medición de satisfacción del cliente en su startup?":
-          if (answer === 'Sí') score += 5*multi;
-          if (subAnswer) {
-            switch (subAnswer) {
-              case 'Nada satisfecho':
-                score += 0*multi;
-                break;
-              case 'Poco satisfecho':
-                score += 1*multi;
-                break;
-              case 'Neutro':
-                score += 2*multi;
-                break;
-              case 'Satisfecho':
-                score += 3*multi;
-                break;
-              case 'Muy Satisfecho':
-                score += 5*multi;
-                break;
-              default:
-                break;
-            }
+          if (answer === 'Sí') score += 5;
+          break;
+        case "¿Según su métrica de satisfacción del cliente, cuán satisfecho está su cliente?":
+          switch (answer) {
+            case 'Nada satisfecho':
+              score += 0;
+              break;
+            case 'Poco satisfecho':
+              score += 1;
+              break;
+            case 'Neutro':
+              score += 2;
+              break;
+            case 'Satisfecho':
+              score += 3;
+              break;
+            case 'Muy Satisfecho':
+              score += 5;
+              break;
+            default:
+              break;
           }
           break;
         case "¿Su startup tiene financiamiento (Propia/externa)":
-          if (answer === 'Sí') score += 5*multi; //Verificar
-          if (subAnswer) {
-            switch (subAnswer) {
-              case 'Ahorros':
-                score += 1*multi;
-                break;
-              case 'Inversores privados':
-                score += 2*multi;
-                break;
-              case 'Inversores profesionales':
-                score += 4*multi;
-                break;
-              case 'Salida a bolsa':
-                score += 5*multi;
-                break;
-              default:
-                break;
-            }
+          if (answer === 'Sí') score += 5; //Verificar
+          break;
+        case "Seleccione en qué categoría de financiación se encuentra su startup.":
+          switch (answer) {
+            case 'Ahorros':
+              score += 1;
+              break;
+            case 'Inversores privados':
+              score += 2;
+              break;
+            case 'Inversores profesionales':
+              score += 4;
+              break;
+            case 'Salida a bolsa':
+              score += 5;
+              break;
+            default:
+              break;
           }
           break;
         case "¿Está siendo incubado en alguna incubadora de empresas?":
-          if (answer === 'Sí') score += 10*multi;
+          if (answer === 'Sí') score += 10;
           break;
         case "¿Ha recibido o está recibiendo apoyo gubernamental (Económico, Tutoría, etc)?":
-          if (answer === 'Sí') score += 10*multi;
+          if (answer === 'Sí') score += 10;
           break;
+
         case "¿En dónde se encuentra ubicada tu start up?":
-          if (answer === 'Nacional') score += 10*multi;
-          else score += 10*multi;
+          if (answer === 'Nacional') score += 10;
+          else score += 10;
           break;
         case "¿Qué tanto influyen las políticas estatales científicas y tecnológicas en tu start up?":
           switch (answer) {
             case 'Casi nada de influencia':
-              score += 10*multi;
+              score += 10;
               break;
             case 'Muy Poca influencia':
-              score += 8*multi;
+              score += 8;
               break;
             case 'Influencia media':
-              score += 5*multi;
+              score += 5;
               break;
             case 'Elevada influencia':
-              score += 2*multi;
+              score += 2;
               break;
             case 'Dependencia':
-              score += 0*multi;
+              score += 0;
               break;
             default:
               break;
@@ -89,9 +132,19 @@ const evaluarExito = (answers) => {
         case "¿El ecosistema actual de su startup presenta factores de innovación y emprendimiento que hayan sido útiles para su desarrollo?":
           if (answer === 'Sí') score += 10;
           break;
+
         case "¿Su startup ha sido capaz de adecuarse a los cambios? Mencione un ejemplo.":
-          if (answer.trim().length > 0) score += 10;
+          const prompt1 = `La pregunta fue: "${question}"; y su respuesta fue: "${answer}". Evalúa si la respuesta cumple con la pregunta. Las respuestas que puedes darme son únicamente, 'Sí' o 'No'`;
+          const geminiResponse1 = await fetchGeminiResponse(prompt1, API_KEY);
+          
+          if (geminiResponse1 === "Sí") {
+            score += 10;
+          }
+          console.log("Pregunta1: ",question)
+            console.log("Respuesta1: ",answer)
+            console.log("Analisis1: ",geminiResponse1)
           break;
+
         case "¿Su start up busca la innovación?":
           if (answer === 'Sí') score += 10;
           break;
@@ -118,127 +171,65 @@ const evaluarExito = (answers) => {
           break;
         case "¿Tiene experiencia en el sector?":
           if (answer === 'Sí') score += 5;
-          if (subAnswer) {
-            switch (subAnswer) {
-              case 'Muy baja':
-                score += 1;
-                break;
-              case 'Baja':
-                score += 2;
-                break;
-              case 'Aceptable':
-                score += 3;
-                break;
-              case 'Considerable':
-                score += 4;
-                break;
-              case 'Elevada':
-                score += 5;
-                break;
-              default:
-                break;
-            }
-          }
           break;
         case "¿Tiene experiencia en creación de empresas?":
           if (answer === 'Sí') score += 5;
-          if (subAnswer) {
-            switch (subAnswer) {
-              case 'Muy baja':
-                score += 1;
-                break;
-              case 'Baja':
-                score += 2;
-                break;
-              case 'Aceptable':
-                score += 3;
-                break;
-              case 'Considerable':
-                score += 4;
-                break;
-              case 'Elevada':
-                score += 5;
-                break;
-              default:
-                break;
-            }
-          }
           break;
         case "¿Cuenta con habilidades técnicas y empresariales?":
           if (answer === 'Sí') score += 5;
-          if (subAnswer) {
-            switch (subAnswer) {
-              case 'Muy baja':
-                score += 1;
-                break;
-              case 'Baja':
-                score += 2;
-                break;
-              case 'Aceptable':
-                score += 3;
-                break;
-              case 'Considerable':
-                score += 4;
-                break;
-              case 'Elevada':
-                score += 5;
-                break;
-              default:
-                break;
-            }
-          }
           break;
         case "¿Tiene experiencia en Investigación & Desarrollo?":
           if (answer === 'Sí') score += 5;
-          if (subAnswer) {
-            switch (subAnswer) {
-              case 'Muy baja':
-                score += 1;
-                break;
-              case 'Baja':
-                score += 2;
-                break;
-              case 'Aceptable':
-                score += 3;
-                break;
-              case 'Considerable':
-                score += 4;
-                break;
-              case 'Elevada':
-                score += 5;
-                break;
-              default:
-                break;
-            }
-          }
           break;
         case "¿Tiene experiencia en la gestión empresarial?":
           if (answer === 'Sí') score += 5;
-          if (subAnswer) {
-            switch (subAnswer) {
-              case 'Muy baja':
-                score += 1;
-                break;
-              case 'Baja':
-                score += 2;
-                break;
-              case 'Aceptable':
-                score += 3;
-                break;
-              case 'Considerable':
-                score += 4;
-                break;
-              case 'Elevada':
-                score += 5;
-                break;
-              default:
-                break;
-            }
+          break;
+        case "¿Cuánta?":
+          switch (answer) {
+            case 'Muy baja':
+              score += 1;
+              break;
+            case 'Baja':
+              score += 2;
+              break;
+            case 'Aceptable':
+              score += 3;
+              break;
+            case 'Considerable':
+              score += 4;
+              break;
+            case 'Elevada':
+              score += 5;
+              break;
+            default:
+              break;
           }
           break;
         case "¿Su startup presenta liderazgo empresarial? Mencione un ejemplo.":
-          if (answer.trim().length > 20) score += 10;
+            const prompt2 = `La pregunta fue: "${question}"; y su respuesta fue: "${answer}". Evalúa si la respuesta cumple con la pregunta. Las respuestas que puedes darme son únicamente, 'Sí' o 'No'`;
+            const geminiResponse2 = await fetchGeminiResponse(prompt2, API_KEY);
+            
+            if (geminiResponse2 === "Sí") {
+              score += 10;
+            }
+            console.log("Pregunta2: ",question)
+            console.log("Respuesta2: ",answer)
+            console.log("Analisis2: ",geminiResponse2)
+            break;
+         case "¿Los productos/servicios que están planteando son innovadores?":
+            if (answer === 'Sí') score += 5;
           break;
+        case "Defina en qué radica su diferenciación." :
+          const prompt3 = `La pregunta fue ¿Los productos/servicios que están planteando son innovadores?"${question}"; y su respuesta fue: "${answer}", Evalúa si la respuesta cumple con la pregunta. Las respuestas que puedes darme son únicamente, 'Sí' o 'No'`;
+          const geminiResponse3 = await fetchGeminiResponse(prompt3, API_KEY);
+              
+          if (geminiResponse3 === "Sí") {
+            score += 5;
+          }
+          console.log("Pregunta3: ",question)
+          console.log("Respuesta3: ",answer)
+          console.log("Analisis3: ",geminiResponse3)
+          break; 
         case "¿Qué tanta motivación tenía al crear su start up?":
           switch (answer) {
             case 'Sin motivación':
@@ -260,19 +251,16 @@ const evaluarExito = (answers) => {
               break;
           }
           break;
-        case "¿Los productos/servicios que están planteando son innovadores?":
-          if (answer === 'Sí') score += 5;
-          if (subAnswer && subAnswer.trim().length > 20) score += 5;
-          break;
+          
         default:
           break;
       }
-    });
-  
-    if (score >= 150) return "Éxito Alto";
-    if (score >= 120) return "Éxito Moderado";
-    if (score >= 90) return "Éxito Bajo";
-    if (score >= 60) return "Éxito muy bajo";
+    };
+    console.log("score: ",score);
+    if (score >= 144) return "Éxito Alto";
+    if (score >= 108) return "Éxito Moderado";
+    if (score >= 72) return "Éxito Bajo";
+    if (score >= 36) return "Éxito muy bajo";
     return "Éxito nulo";
   };
   

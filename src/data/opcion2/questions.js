@@ -11,18 +11,12 @@ export default[
       question: "¿Su start up busca la innovación?",
       type: "SI_NO",
     },
-    {
-
-      question: "¿Qué tanta cultura empresarial hay en su start up?",
-      type: "ESCALA",
-      opciones: ['Nada de cultura', 'Baja cultura', 'Intermedia cultura', 'Considerable cultura', 'Alta cultura']
-  
-    },
+    
     {
       question: "¿Tiene experiencia en el sector?",
       type: "SI_NO",
       subQuestion: {
-        question: "Cuánta",
+        question: "¿Cuánta?",
         type: "ESCALA",
         opciones: ['Muy baja', 'Baja', 'Aceptable', 'Considerable', 'Elevada']
       }
@@ -31,7 +25,7 @@ export default[
       question: "¿Tiene experiencia en creación de empresas?",
       type: "SI_NO",
       subQuestion: {
-        question: "Cuánta",
+        question: "¿Cuánta?",
         type: "ESCALA",
         opciones: ['Muy baja', 'Baja', 'Aceptable', 'Considerable', 'Elevada']
       }
@@ -40,7 +34,7 @@ export default[
       question: "¿Cuenta con habilidades técnicas y empresariales?",
       type: "SI_NO",
       subQuestion: {
-        question: "Cuánta (Habilidades Técnicas)",
+        question: "¿Cuánta?",
         type: "ESCALA",
         opciones: ['Muy baja', 'Baja', 'Aceptable', 'Considerable', 'Elevada']
       }
@@ -49,7 +43,7 @@ export default[
       question: "¿Tiene experiencia en Investigación & Desarrollo?",
       type: "SI_NO",
       subQuestion: {
-        question: "Cuánta",
+        question: "¿Cuánta?",
         type: "ESCALA",
         opciones: ['Muy baja', 'Baja', 'Aceptable', 'Considerable', 'Elevada']
       }
@@ -58,7 +52,7 @@ export default[
       question: "¿Tiene experiencia en la gestión empresarial?",
       type: "SI_NO",
       subQuestion: {
-        question: "Cuánta",
+        question: "¿Cuánta?",
         type: "ESCALA",
         opciones: ['Muy baja', 'Baja', 'Aceptable', 'Considerable', 'Elevada']
       }
@@ -70,7 +64,7 @@ export default[
     {
       question: "¿Qué tanta motivación tenía al crear su start up?",
         type: "ESCALA",
-        opciones: ['Sin motivación', 'Poca motivación', 'Motivación normal', 'Considerable motivación', 'Elevada motivación']
+        opciones: ['Sin motivación', 'Poca motivación', 'Motivación moderada', 'Considerable motivación', 'Elevada motivación']
     },
     {
       question: "¿Los productos/servicios que están planteando son innovadores?",
@@ -79,6 +73,12 @@ export default[
         question: "Defina en qué radica su diferenciación.",
         type: "TEXTO",
       }
+    },
+    {
+      question: "¿Qué tanta cultura empresarial hay en su start up?",
+      type: "ESCALA",
+      opciones: ['Nada de cultura', 'Baja cultura', 'Moderada cultura', 'Considerable cultura', 'Alta cultura']
+  
     },
   ];
   

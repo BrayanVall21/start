@@ -17,8 +17,8 @@ const Home = ({ theme }) => {
   }, [theme]);
 
   const handleShowOpciones = () => {
-    navigation.navigate("Preguntas", { questions: questions });
-    //navigation.navigate("Opciones", { questions: questions });
+    //navigation.navigate("Preguntas", { questions: questions });
+    navigation.navigate("Opciones", { questions: questions });
   };
 
   const getBannerUrl = (theme) => {

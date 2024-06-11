@@ -9,7 +9,7 @@ export default[
         }
       },
       {
-        question: "¿Su startup tiene financiamiento (Propia/externa)",
+        question: "¿Su startup tiene financiamiento (Propia/externa)?",
         type: "SI_NO",
         subQuestion: {
           question: "Seleccione en qué categoría de financiación se encuentra su startup.",

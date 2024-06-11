@@ -34,7 +34,7 @@ const ResultsScreen = ({theme}) => {
 
   return (
     <View style={[styles.container, { backgroundColor: currentTheme === 'dark' ? '#1B1A55' : 'white' }]}>
-      <Text style={[styles.title, { color: currentTheme === 'dark' ? 'white' : 'black' }]}>Resultados</Text>
+      <Text style={[styles.title, { color: currentTheme === 'dark' ? 'white' : 'black' }]}>Respuestas</Text>
       <FlatList
         data={answers}
         keyExtractor={(item, index) => index.toString()}

@@ -38,7 +38,7 @@ const SettingsScreens = ({ theme}) => {
   };
 
   const handleViewResults = () => {
-    const answers = [...iResultados, ...eResultados];
+    const answers = [ ...eResultados, ...iResultados];
     navigation.navigate("PostResultados", { answers, theme });
   };
   return (
