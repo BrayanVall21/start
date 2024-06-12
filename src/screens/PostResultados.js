@@ -4,37 +4,9 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import evaluarExito from '../data/evaluacion';
 import questions1 from '../data/opcion1/questions';
 import questions2 from '../data/opcion2/questions';
+import totalQuestions from '../data/totalQuestions';
 import { LinearGradient } from 'expo-linear-gradient';
-
-const interpretResponses = (responses, questions) => {
-  let positives = [];
-  let negatives = [];
-
-  responses.forEach(response => {
-    let questionObj = questions.find(q => q.question === response.question);
-    if (response.answer.toLowerCase() === 'sí' || response.answer.toLowerCase() === 'aceptable' || response.answer.toLowerCase().includes('profesionales') || response.answer.toLowerCase().includes('motivación moderada') || response.answer.toLowerCase().includes('moderada cultura')) {
-      positives.push(response);
-    } else if (response.answer.toLowerCase() === 'no') {
-      negatives.push(response);
-    }
-  });
-
-  let positiveText = "Veo que tu startup tiene varios aspectos positivos, como:";
-  positives.forEach(response => {
-    positiveText += ` ${response.question.toLowerCase().replace('¿', '').replace('?', '')},`;
-  });
-  positiveText = positiveText.slice(0, -1) + ".";
-
-  let negativeText = "Sin embargo, hay algunos aspectos que podrían necesitar atención:";
-  negatives.forEach(response => {
-    negativeText += ` ${response.question.toLowerCase().replace('¿', '').replace('?', '')},`;
-  });
-  negativeText = negativeText.slice(0, -1) + ".";
-
-  let recommendationText = "Para mejorar en estos aspectos, considera: invertir en formación y desarrollo en áreas de gestión empresarial e I+D, implementar métricas de satisfacción del cliente, buscar apoyo gubernamental, y fortalecer la cultura empresarial mediante talleres y actividades.";
-
-  return `${positiveText}\n\n${negativeText}\n\n${recommendationText}`;
-};
+import interpretResponses from '../data/interpretResponses'; 
 
 const ResultsScreen = () => {
   const route = useRoute();
@@ -52,10 +24,17 @@ const ResultsScreen = () => {
 
     if (answers) {
       (async () => {
+        const API_KEY = 'Tu-API-Key-Aquí'; // Asegúrate de usar tu clave API real
         const result = await evaluarExito(answers);
         setExito(result);
-        setInterpretation(interpretResponses(answers, questions));
-        console.log('Respuestas: ', answers);
+        try {
+          const interpretationResult = await interpretResponses(answers, totalQuestions, API_KEY);
+          setInterpretation(interpretationResult);
+        } catch (error) {
+          console.error("Error al interpretar las respuestas: ", error);
+          setInterpretation("Hubo un error al interpretar las respuestas.");
+        }
+        
       })();
     } else {
       setExito("No hay respuestas");

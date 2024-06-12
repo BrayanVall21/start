@@ -1,46 +1,8 @@
-import fetch from 'node-fetch'; // Asegúrate de tener 'node-fetch' si estás usando Node.js
-
-const fetchGeminiResponse = async (prompt, apiKey) => {
-  const requestBody = {
-    contents: [{
-      parts: [{
-        text: prompt
-      }]
-    }],
-    safetySettings: [{
-      category: "HARM_CATEGORY_DANGEROUS_CONTENT",
-      threshold: "BLOCK_ONLY_HIGH"
-    }],
-    generationConfig: {
-      stopSequences: ["Title"],
-      temperature: 1.0
-    }
-  };
-
-  try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(requestBody)
-    });
-
-    const data = await response.json();
-    const result = data.candidates[0].content.parts[0].text.trim();
-    return result;
-  } catch (error) {
-    console.error('Error fetching data from Gemini: ', error);
-    return null;
-  }
-};
-
-
+import { fetchGeminiResponse } from './gemini';
 
 // evaluacion.js
 const evaluarExito = async (answers) => {
   let score = 0;
-  const API_KEY = 'AIzaSyALve24SgD0_zE8vNuy_XMYjzgk4_onm-0'; // Asegúrate de usar tu clave API real
 
   for (let i = 0; i < answers.length; i++) {
     const { question, answer } = answers[i];
@@ -135,7 +97,7 @@ const evaluarExito = async (answers) => {
 
         case "¿Su startup ha sido capaz de adecuarse a los cambios? Mencione un ejemplo.":
           const prompt1 = `La pregunta fue: "${question}"; y su respuesta fue: "${answer}". Evalúa si la respuesta cumple con la pregunta. Las respuestas que puedes darme son únicamente, 'Sí' o 'No'`;
-          const geminiResponse1 = await fetchGeminiResponse(prompt1, API_KEY);
+          const geminiResponse1 = await fetchGeminiResponse(prompt1);
           
           if (geminiResponse1 === "Sí") {
             score += 10;
@@ -207,7 +169,7 @@ const evaluarExito = async (answers) => {
           break;
         case "¿Su startup presenta liderazgo empresarial? Mencione un ejemplo.":
             const prompt2 = `La pregunta fue: "${question}"; y su respuesta fue: "${answer}". Evalúa si la respuesta cumple con la pregunta. Las respuestas que puedes darme son únicamente, 'Sí' o 'No'`;
-            const geminiResponse2 = await fetchGeminiResponse(prompt2, API_KEY);
+            const geminiResponse2 = await fetchGeminiResponse(prompt2);
             
             if (geminiResponse2 === "Sí") {
               score += 10;
@@ -221,7 +183,7 @@ const evaluarExito = async (answers) => {
           break;
         case "Defina en qué radica su diferenciación." :
           const prompt3 = `La pregunta fue ¿Los productos/servicios que están planteando son innovadores?"${question}"; y su respuesta fue: "${answer}", Evalúa si la respuesta cumple con la pregunta. Las respuestas que puedes darme son únicamente, 'Sí' o 'No'`;
-          const geminiResponse3 = await fetchGeminiResponse(prompt3, API_KEY);
+          const geminiResponse3 = await fetchGeminiResponse(prompt3);
               
           if (geminiResponse3 === "Sí") {
             score += 5;
