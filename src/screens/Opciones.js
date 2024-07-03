@@ -1,5 +1,5 @@
-import React, {useEffect,useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, Dimensions, Alert, Button } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Text, View, Button } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -7,9 +7,10 @@ import questions1 from '../data/opcion1/questions';
 import questions2 from '../data/opcion2/questions';
 import { useNavigation } from "@react-navigation/native";
 import { useResultados } from '../data/almacen';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-const SettingsScreens = ({ theme}) => {
-  const navigation = useNavigation(); 
+const SettingsScreens = ({ theme }) => {
+  const navigation = useNavigation();
   const { iResultados, setIResultados, eResultados, setEResultados } = useResultados();
 
   const medicionDispositivos = [
@@ -17,30 +18,17 @@ const SettingsScreens = ({ theme}) => {
     { nombre: 'Factores Internos', icon: 'heart', questions: questions2, tipo: 'internos' },
   ];
 
-  const windowWidth = Dimensions.get('window').width;
   const [currentQuestions, setCurrentQuestions] = useState(null);
-  //const showResultadosButton = iResultados !== null && eResultados !== null; 
-
-  /*
-  useEffect(() => {
-    if (resultados !== null) {
-      switch (origen) {
-        case 'externos': setIResultados(resultados); break;
-        case 'internos': setEResultados(resultados); break;
-      }
-    }
-  }, [resultados, origen]);
-  */
 
   const handleIconPress = (questions) => {
-    //setCurrentQuestions(questions.questions);
-    navigation.navigate("Preguntas2", { questions: questions.questions, tipo: questions.tipo });
+    navigation.navigate("Evaluación", { questions: questions.questions, tipo: questions.tipo });
   };
 
   const handleViewResults = () => {
-    const answers = [ ...eResultados, ...iResultados];
-    navigation.navigate("PostResultados", { answers, theme });
+    const answers = [...eResultados, ...iResultados];
+    navigation.navigate("Resultados", { answers, theme });
   };
+
   return (
     <LinearGradient colors={theme === 'dark' ? ["#070F2B", "#1B1A55", "#535C91"] : ["#1B1A55", "#535C91", "#9290C3"]} style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -49,14 +37,14 @@ const SettingsScreens = ({ theme}) => {
           <View style={styles.cardsContainer}>
             {medicionDispositivos.map((area, index) => (
               <View key={index} style={styles.infoDetailsCard}>
-                <FontAwesome name={area.icon} size={24} color="white" style={styles.iconTopLeft} />
+                <FontAwesome name={area.icon} size={wp('6%')} color="white" style={styles.iconTopLeft} />
                 <Text style={styles.infoDetailsCardWeekDay}>{area.nombre}</Text>
-                <MaterialIcons name="arrow-forward" size={24} color="white" style={styles.iconBottomRight} onPress={() => handleIconPress(area)} />
+                <MaterialIcons name="arrow-forward" size={wp('6%')} color="white" style={styles.iconBottomRight} onPress={() => handleIconPress(area)} />
               </View>
             ))}
           </View>
         </View>
-        
+
         {(iResultados !== null && eResultados !== null) && (
           <View style={styles.resultadosButtonContainer}>
             <Button
@@ -66,7 +54,6 @@ const SettingsScreens = ({ theme}) => {
             />
           </View>
         )}
-
       </ScrollView>
     </LinearGradient>
   );
@@ -80,48 +67,53 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   infoDetails: {
-    marginTop: 20,
-    padding: 20,
+    marginTop: hp('2%'),
+    padding: wp('5%'),
     alignItems: 'center',
   },
   infoDetailsText: {
     color: "#FFF",
-    marginTop: 35,
-    fontSize: 22,
+    marginTop: hp('4%'),
+    fontSize: wp('5.5%'),
     fontWeight: "600",
   },
   cardsContainer: {
     flexDirection: 'row',
-    justifyContent: 'center', // Cambiado para centrar los elementos
-    paddingHorizontal: 10,
-    marginTop: 20,
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    paddingHorizontal: wp('2%'),
+    marginTop: hp('2%'),
   },
   infoDetailsCard: {
-    width: '45%', // Ajusta el tamaño para que se centren mejor
-    height: 250,
+    width: wp('42%'), // Ajustado para que se adapten mejor en diferentes pantallas
+    height: hp('30%'),
     backgroundColor: "rgba(255, 255, 255, 0.23)",
-    borderRadius: 8,
+    borderRadius: wp('2%'),
     alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: 10, // Añade margen horizontal para separar los elementos
+    margin: wp('2%'),
     position: 'relative',
   },
   infoDetailsCardWeekDay: {
-    fontSize: 18,
+    fontSize: wp('4.5%'),
     color: "#FFF",
     textAlign: 'center',
     fontWeight: "400",
-    marginBottom: 8,
+    marginBottom: hp('1%'),
   },
   iconTopLeft: {
     position: 'absolute',
-    top: 10,
-    left: 10,
+    top: hp('1%'),
+    left: wp('1%'),
   },
   iconBottomRight: {
     position: 'absolute',
-    bottom: 10,
-    right: 10,
+    bottom: hp('1%'),
+    right: wp('1%'),
+  },
+  resultadosButtonContainer: {
+    marginVertical: hp('3%'),
+    alignItems: 'center',
   },
 });
 

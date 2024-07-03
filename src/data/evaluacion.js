@@ -188,6 +188,8 @@ const evaluarExito = async (answers) => {
           if (geminiResponse3 === "Sí") {
             score += 5;
           }
+          else 
+            score -= 5;
           console.log("Pregunta3: ",question)
           console.log("Respuesta3: ",answer)
           console.log("Analisis3: ",geminiResponse3)

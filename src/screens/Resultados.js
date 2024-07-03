@@ -1,78 +1,107 @@
-// ResultsScreen.js
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import evaluarExito from '../data/evaluacion';
+import questions1 from '../data/opcion1/questions';
+import questions2 from '../data/opcion2/questions';
+import totalQuestions from '../data/totalQuestions';
+import { LinearGradient } from 'expo-linear-gradient';
+import interpretResponses from '../data/interpretResponses'; 
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const ResultsScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const { answers, fase, theme } = route.params;
-
+  const questions = [...questions1, ...questions2];
+  const { answers, theme } = route.params;
   const [currentTheme, setCurrentTheme] = useState(theme);
+  const [exito, setExito] = useState("Calculando...");
+  const [interpretation, setInterpretation] = useState("Calculando...");
 
   useEffect(() => {
     if (theme !== currentTheme) {
       setCurrentTheme(theme);
     }
-  }, [theme]);
+
+    if (answers) {
+      (async () => {
+        const result = await evaluarExito(answers);
+        setExito(result);
+        try {
+          const interpretationResult = await interpretResponses(answers, totalQuestions);
+          setInterpretation(interpretationResult);
+        } catch (error) {
+          console.error("Error al interpretar las respuestas: ", error);
+          setInterpretation("Hubo un error al interpretar las respuestas.");
+        }
+        
+      })();
+    } else {
+      setExito("No hay respuestas");
+      setInterpretation("No hay respuestas");
+    }
+  }, [theme, answers]);
 
   const styles = styling(currentTheme);
 
   const handleNavigation = () => {
-    if(fase=== 'Seed' || fase === 'Early'){
-      navigation.navigate('Opciones');
-    }
-    else{
-      navigation.navigate('Inicio');
-    }
-    
+    navigation.navigate('Opciones');
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: currentTheme === 'dark' ? '#1B1A55' : 'white' }]}>
-      <Text style={[styles.title, { color: currentTheme === 'dark' ? 'white' : 'black' }]}>Resultados</Text>
-      <Text style={[styles.phase, { color: currentTheme === 'dark' ? 'white' : 'black' }]}>Fase de la startup: {fase}</Text>
-      <FlatList
-        data={answers}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.answerContainer}>
-            <Text style={[styles.question, { color: currentTheme === 'dark' ? 'white' : 'black' }]}>{item.question}</Text>
-            <Text style={{ fontSize: 16, color: currentTheme === 'dark' ? 'white' : 'black' }}>{item.answer}</Text>
+    <LinearGradient colors={theme === 'dark' ? ["#070F2B", "#1B1A55", "#535C91"] : ["#1B1A55", "#535C91", "#9290C3"]} style={styles.linearGradient}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={[styles.content, { backgroundColor: theme === 'dark' ? '#1B1A55' : 'white' }]}>
+          <Text style={[styles.title, { color: theme === 'dark' ? 'white' : 'black' }]}>Resultados</Text>
+          <Text style={[styles.exito, { color: theme === 'dark' ? 'white' : 'black' }]}>Éxito de la startup: {exito}</Text>
+          <Text style={[styles.exito, { color: theme === 'dark' ? 'white' : 'black' }]}>Interpretación de los resultados:</Text>
+          <Text style={[styles.interpretation, { color: theme === 'dark' ? 'white' : 'black' }]}>{interpretation}</Text>
+          
+          <View style={styles.buttonContainer}>
+            <Button
+              title="Finalizar"
+              onPress={handleNavigation}
+              color={theme === 'dark' ? '#FFFFFF' : '#000000'}
+            />
           </View>
-        )}
-      />
-      <Button
-        title="Siguiente"
-        onPress={handleNavigation}
-        color={currentTheme === 'dark' ? '#FFFFFF' : '#000000'}
-      />
-    </View>
+        </View>
+      </ScrollView>
+    </LinearGradient>
   );
 };
 
 const styling = theme => 
   StyleSheet.create({
-    container: {
+    linearGradient: {
       flex: 1,
-      padding: 20,
+    },
+    scrollContainer: {
+      flexGrow: 1,
+      paddingVertical: hp('2%'),
+      paddingHorizontal: wp('5%'),
+    },
+    content: {
+      flex: 1,
     },
     title: {
-      fontSize: 24,
+      fontSize: wp('6%'),
       fontWeight: 'bold',
-      marginBottom: 20,
+      marginVertical: hp('2%'),
+      marginHorizontal: wp('5%'), 
     },
-    phase: {
-      fontSize: 20,
+    exito: {
+      fontSize: wp('5%'),
       fontWeight: 'bold',
-      marginBottom: 20,
+      marginBottom: hp('2%'),
+      marginHorizontal: wp('5%'), 
     },
-    answerContainer: {
-      marginBottom: 15,
+    interpretation: {
+      fontSize: wp('4%'),
+      marginBottom: hp('2%'),
+      marginHorizontal: wp('5%'), 
     },
-    question: {
-      fontSize: 18,
-      fontWeight: 'bold',
+    buttonContainer: {
+      marginTop: hp('2%'),
     },
   });
 

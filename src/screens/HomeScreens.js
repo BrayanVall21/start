@@ -1,32 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image, Dimensions } from 'react-native';
 import { Colors } from '../theme';
 import questions from '../data/pre/questions';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const Home = ({ theme }) => {
   const navigation = useNavigation();
   const [themeValue, setThemeValue] = useState('light');
-  const [bannerUrl, setBannerUrl] = useState('https://i.postimg.cc/QM81nzCN/1.png'); // Inicializa con una URL predeterminada
+  const [bannerUrl, setBannerUrl] = useState('https://i.postimg.cc/QM81nzCN/1.png');
 
   useEffect(() => {
     setThemeValue(theme); 
     const url = getBannerUrl(theme);
-    console.log('Theme:', theme); // Depuración
+    console.log('Theme:', theme); 
     setBannerUrl(url);
   }, [theme]);
 
   const handleShowOpciones = () => {
-    navigation.navigate("Preguntas", { questions: questions });
-    //navigation.navigate("Opciones", { questions: questions });
+    navigation.navigate("Clasificación", { questions: questions });
   };
 
   const getBannerUrl = (theme) => {
     const bannerUrls = {
       light: 'https://i.postimg.cc/QM81nzCN/1.png',
-      dark: 'https://i.postimg.cc/QM81nzCN/1.png', // Cambiar por la URL de la imagen para el tema oscuro
+      dark: 'https://i.postimg.cc/QM81nzCN/1.png',
     };
-    return bannerUrls[theme] || 'https://i.postimg.cc/QM81nzCN/1.png'; // Valor predeterminado
+    return bannerUrls[theme] || 'https://i.postimg.cc/QM81nzCN/1.png';
   };
 
   const styles = styling(themeValue);
@@ -56,16 +56,17 @@ const styling = theme =>
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
+      padding: wp('5%'), // Uso de porcentaje para el padding
     },
     title: {
-      fontSize: 36,
+      fontSize: wp('8%'), // Uso de porcentaje para la fuente
       fontWeight: '600',
       textAlign: 'center',
-      marginTop: 60,
+      marginTop: hp('5%'), // Uso de porcentaje para el margen superior
     },
     banner: {
-      height: 350,
-      width: 350,
+      height: hp('40%'), // Uso de porcentaje para la altura
+      width: wp('80%'), // Uso de porcentaje para el ancho
     },
     bannerContainer: {
       justifyContent: 'center',
@@ -73,15 +74,15 @@ const styling = theme =>
       flex: 1,
     },
     button: {
-      width: '80%',
+      width: wp('80%'), // Uso de porcentaje para el ancho
       backgroundColor: Colors[theme]?.sky,
-      padding: 16,
-      borderRadius: 16,
+      padding: wp('4%'), // Uso de porcentaje para el padding
+      borderRadius: wp('4%'), // Uso de porcentaje para el borde redondeado
       alignItems: 'center',
-      marginBottom: 25,
+      marginBottom: hp('3%'), // Uso de porcentaje para el margen inferior
     },
     buttonText: {
-      fontSize: 24,
+      fontSize: wp('6%'), // Uso de porcentaje para la fuente
       fontWeight: '600',
       color: Colors[theme]?.commonWhite,
     },

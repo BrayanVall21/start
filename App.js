@@ -3,11 +3,11 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/
 import { createStackNavigator } from "@react-navigation/stack";
 import Home from "./src/screens/HomeScreens";
 import OPCIONES from "./src/screens/Opciones";
-import Preguntas from "./src/screens/Preguntas";
-import Preguntas2 from "./src/screens/Preguntas2";
+import Clasificacion from "./src/screens/Clasificacion";
+import Evaluacion from "./src/screens/Evaluacion";
+import RecopilacionClasificacion from "./src/screens/Recopilacion Clasificacion";
+import RecopilacionEvaluacion from "./src/screens/Recopilacion Evaluacion";
 import Resultados from "./src/screens/Resultados";
-import Resultados2 from "./src/screens/Resultados2";
-import PostResultados from "./src/screens/PostResultados";
 import ResultadosProvider from "./src/data/almacen";
 import { Colors } from './src/theme';
 import { get } from './src/utiles/Storage';
@@ -54,9 +54,9 @@ export default function App() {
             </View>
           ),
           headerStyle: {
-            backgroundColor: Colors[theme.dark ? 'dark' : 'light'].sky, // Utilizar el color primario del tema
+            backgroundColor: Colors[theme.dark ? 'dark' : 'light'].sky, 
           },
-          headerTintColor: Colors[theme.dark ? 'dark' : 'light'].commonWhite, // Utilizar el color de texto del tema
+          headerTintColor: Colors[theme.dark ? 'dark' : 'light'].commonWhite, 
           headerTitleStyle: {
             fontWeight: "bold",
           },
@@ -68,20 +68,20 @@ export default function App() {
         <Stack.Screen name="Opciones">
           {props => <OPCIONES {...props} theme={themeValue} />}
         </Stack.Screen>
-        <Stack.Screen name="Preguntas">
-          {props => <Preguntas {...props} theme={themeValue} />}
+        <Stack.Screen name="Clasificación">
+          {props => <Clasificacion {...props} theme={themeValue} />}
         </Stack.Screen>
-        <Stack.Screen name="Preguntas2">
-          {props => <Preguntas2 {...props} theme={themeValue} />}
+        <Stack.Screen name="Evaluación">
+          {props => <Evaluacion {...props} theme={themeValue} />}
+        </Stack.Screen>
+        <Stack.Screen name="Recopilacion: Clasificación">
+          {props => <RecopilacionClasificacion {...props} theme={themeValue} />}
+        </Stack.Screen>
+        <Stack.Screen name="Recopilacion: Evaluación">
+          {props => <RecopilacionEvaluacion {...props} theme={themeValue} />}
         </Stack.Screen>
         <Stack.Screen name="Resultados">
           {props => <Resultados {...props} theme={themeValue} />}
-        </Stack.Screen>
-        <Stack.Screen name="Resultados2">
-          {props => <Resultados2 {...props} theme={themeValue} />}
-        </Stack.Screen>
-        <Stack.Screen name="PostResultados">
-          {props => <PostResultados {...props} theme={themeValue} />}
         </Stack.Screen>
         
       </Stack.Navigator>
@@ -92,6 +92,6 @@ export default function App() {
 
 const styles = StyleSheet.create({
   switchContainer: {
-    marginRight: 10, // Espacio de margen a la derecha para separar el interruptor de tema de otros elementos
+    marginRight: 10,
   },
 });
