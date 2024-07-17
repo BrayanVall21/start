@@ -90,6 +90,7 @@ const interpretResponses = async (responses, questions) => {
     ${improvementRecommendations}
   `;
 
+  console.log("Respuestas negativas: ", negatives);
   console.log("Interpretacion: ",interpretationText);
 
   return interpretationText;
